@@ -199,3 +199,6 @@ pids
 *.temp
 tmp/
 temp/
+
+
+tinkaring/
