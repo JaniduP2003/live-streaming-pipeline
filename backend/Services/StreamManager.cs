@@ -39,6 +39,8 @@ public class StreamManager{
             IsLive = false
         };
 
+        //“Store the stream ID (Id) under this stream key (key)”
+        //If the key already exists → it updates the value If it doesn’t exist → it adds a new entry
         _KeyToStreamId[key] = Id;
         _streams[id] = stream;
 
@@ -48,10 +50,21 @@ public class StreamManager{
     }
  
     //Retrieves stream by ID return streamdata or NULL
+    public StreamData? GetStream(string StreamId){
+        _streams.TryGetValue(StreamId , out var stream);
+        // if the value is not found its assigned by out var stream this
+        return stream;
+    }
 
     //Gets all currently live streams return a list<>
+    public List<StreamData> GetLiveStream(){
+        return _streams.Values.Where(s=> s.IsLive).ToList();
+    }
 
     //Validates stream access credentials return bool;
+    public bool ValidateStreamKey(string StreamId , string key ){
+        return _streams.TryGetValue(StreamId , out var  stream ) && stream.Key = key;
+    }
 
     //Changes stream status to live
 
