@@ -67,9 +67,52 @@ public class StreamManager{
     }
 
     //Changes stream status to live
+    //this make the strem as LIVE
+    // finds by id then chage the status as LIVE and logs time 
+    //adds logger info
+    public void MarkStreamLive(string streamId){
+        if(_streams.TryGetValue(streamId, out var stream )){
+            stream.IsLive =true;
+            stream.LiveSince = DateTime.UtcNow;
+            _logger.LogInformation("stream {StreamId} is now Live " , streamId);
+        }
+    }
 
-    //Changes stream status to live
+    //lets do as unlive 
+        public void MarkStreamOffline(string streamId)
+    {
+        if (_streams.TryGetValue(streamId, out var stream))
+        {
+            stream.IsLive = false;
+            stream.LiveSince = null;
+            _logger.LogInformation("Stream {StreamId} went offline", streamId);
+        }
+    }
 
-    //Changes stream status to live return bool
+    //now delete the stream
+    public bool DeleteStream(string streamId , string key){
+        if(_streams.TryGetValue(streamId ,out var stream) && Stream.Key == key ){
+            _streams.Remove(streamId);
+            _KeyToStreamId.Remove(key);
+            _logger.LogInformation("stream {StreamId} Deleted " , streamId);
+            return true;
+        }
+        return false ;
+    }
+
+    // make a uniqeid using the Guid.newgid
+    private string genarateId(){
+        return Guid.NewGuid().ToString("N")[..8];
+    }
+
+    //genarate sec key 
+    private string GenerateSecureKey()
+    {
+        var bytes = RandomNumberGenerator.GetBytes(24);
+        return Convert.ToBase64String(bytes)
+            .Replace("/", "_")
+            .Replace("+", "-")
+            .Substring(0, 32);
+    }
 
 }
