@@ -10,16 +10,18 @@ builder.Services.AddSwaggerGen();
 // add a memory cache 
 builder.Services.AddMemoryCache();
 
-//add the streem manager as singalon
-builder.Services.AddSingleton<StremManager>();
+//add the stream manager as singleton
+builder.Services.AddSingleton<StreamManager>();
 
 // make the cores 
-builder.Services.AddCors(options =>{
-    options.AddPolicy("NextJsPolicy", policy =>{
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("NextJsPolicy", policy =>
+    {
         policy.WithOrigins(
             "http://localhost:3000",
             "http://localhost:3001",
-            "https://yoursite.vercel.app" 
+            "https://yoursite.vercel.app"
         )
         .AllowAnyHeader()
         .AllowAnyMethod()
@@ -27,24 +29,26 @@ builder.Services.AddCors(options =>{
     });
 });
 
-var app =builder.Build();
+var app = builder.Build();
 
-if(app.Environment.IsDevelopment()){
+if (app.Environment.IsDevelopment())
+{
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
-app.UseCors("NextjsPolicy");
+app.UseCors("NextJsPolicy");
 app.UseAuthorization();
 app.MapControllers();
 
-app.MapGet("/", () => new{
+app.MapGet("/", () => new
+{
     status = "online",
     service = "Streeming API",
     version = "1.0.0",
     timestamp = DateTime.UtcNow
 });
 
-app.MapGet("/health" , () => "ok");
+app.MapGet("/health", () => "ok");
 
 app.Run();
