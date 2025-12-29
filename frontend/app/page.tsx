@@ -10,7 +10,7 @@ async function getLiveStreams() {
     return await res.json();
   } catch (error) {
     console.error("Failed to fetch live streams:", error);
-    return [];
+    return  [];
   }
 }
 
