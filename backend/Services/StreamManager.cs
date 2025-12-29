@@ -1,6 +1,6 @@
 // make the logic to the stream 
-using backedn.Models;
-using  System.Security.Cryptography;
+using backend.Models;
+using System.Security.Cryptography;
 
 namespace backend.Services;
 
@@ -14,7 +14,7 @@ public class StreamManager{
     //to log all the chages use Ilogger interface 
     private readonly ILogger<StreamManager> _logger ;
 
-    public StreamManager(Ilogger<StreamManager> logger ){
+    public StreamManager(ILogger<StreamManager> logger ){
         _logger =logger ;
     }
 
@@ -28,8 +28,8 @@ public class StreamManager{
         // public return_obj name(parameter)
 
     public StreamData CreateStream(string Title){
-        var Id =GenarateId();
-        var key = GenarateSecureKey();
+        var Id = GenerateId();
+        var key = GenerateSecureKey();
 
         var stream = new StreamData{
             Id = Id,
@@ -42,9 +42,9 @@ public class StreamManager{
         //“Store the stream ID (Id) under this stream key (key)”
         //If the key already exists → it updates the value If it doesn’t exist → it adds a new entry
         _KeyToStreamId[key] = Id;
-        _streams[id] = stream;
+        _streams[Id] = stream;
 
-        _logger.LogInformation("Stream Created: {StreamId}",id);
+        _logger.LogInformation("Stream Created: {StreamId}", Id);
 
         return stream;
     }
@@ -57,13 +57,13 @@ public class StreamManager{
     }
 
     //Gets all currently live streams return a list<>
-    public List<StreamData> GetLiveStream(){
+    public List<StreamData> GetLiveStreams(){
         return _streams.Values.Where(s=> s.IsLive).ToList();
     }
 
     //Validates stream access credentials return bool;
     public bool ValidateStreamKey(string StreamId , string key ){
-        return _streams.TryGetValue(StreamId , out var  stream ) && stream.Key = key;
+        return _streams.TryGetValue(StreamId , out var  stream ) && stream.Key == key;
     }
 
     //Changes stream status to live
@@ -91,7 +91,7 @@ public class StreamManager{
 
     //now delete the stream
     public bool DeleteStream(string streamId , string key){
-        if(_streams.TryGetValue(streamId ,out var stream) && Stream.Key == key ){
+        if(_streams.TryGetValue(streamId ,out var stream) && stream.Key == key ){
             _streams.Remove(streamId);
             _KeyToStreamId.Remove(key);
             _logger.LogInformation("stream {StreamId} Deleted " , streamId);
@@ -101,7 +101,7 @@ public class StreamManager{
     }
 
     // make a uniqeid using the Guid.newgid
-    private string genarateId(){
+    private string GenerateId(){
         return Guid.NewGuid().ToString("N")[..8];
     }
 

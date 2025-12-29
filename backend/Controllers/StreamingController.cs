@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
-using StreamingApi.Models;
-using StreamingApi.Services;
+using backend.Models;
+using backend.Services;
 using System.Web;
 
 namespace backend.Controllers;
@@ -138,7 +138,7 @@ public class StreamingController : ControllerBase
     [HttpPost("on-unpublish")]
     public IActionResult OnUnpublish([FromForm] string stream)
     {
-        var streamId = stream.Split('? ')[0];
+        var streamId = stream.Split("?")[0];
         _streamManager.MarkStreamOffline(streamId);
         return Ok(new { code = 0 });
     }

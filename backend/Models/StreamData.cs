@@ -1,4 +1,4 @@
-namespace backed.Models;
+namespace backend.Models;
 
 public class StreamData{
     public string Id { get;set; } = string.Empty;
