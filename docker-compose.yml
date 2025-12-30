@@ -1,0 +1,26 @@
+version: '3.8'
+services:
+  srs:
+    image: ossrs/srs:5
+    container_name: srs
+    ports:
+      - "1935:1935"   # RTMP
+      - "8080:8080"   # HTTP API & HLS
+    volumes:
+      - ./srs.conf:/usr/local/srs/conf/srs.conf
+    restart: unless-stopped
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: streaming-backend
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - StreamSettings__RtmpServer=srs
+      - StreamSettings__RtmpPort=1935
+    ports:
+      - "5000:5000"
+    depends_on:
+      - srs
+    restart: unless-stoppedv

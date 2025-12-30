@@ -16,32 +16,39 @@ A **100% FREE** end-to-end live streaming platform using OBS, RTMP, SRS Media Se
 ## 🚀 Quick Start
 
 ### 1. Start Backend
+
 ```bash
 cd backend
 dotnet restore
 dotnet run
 ```
+
 Backend runs on: http://localhost:5000
 
 ### 2. Start Frontend
+
 ```bash
 cd frontend
 npm install
 npm run dev
 ```
+
 Frontend runs on: http://localhost:3000
 
 ### 3. Create Stream & Get OBS Settings
+
 ```bash
 ./quick-start.sh
 ```
 
 ### 4. Configure OBS
+
 - **Server:** `rtmp://localhost:1935/live`
 - **Stream Key:** (from quick-start.sh output)
 - Click **Start Streaming**
 
 ### 5. Watch
+
 Open: http://localhost:3000
 
 ## 📚 Complete Guides
@@ -57,11 +64,11 @@ OBS Studio (RTMP) → SRS Media Server (HLS) → .NET API → Next.js Frontend �
 
 ## 💰 Cost: $0/month
 
-| Service | Free Tier |
-|---------|-----------|
-| Render.com | 750 hours/month |
-| Vercel | 100GB bandwidth/month |
-| **TOTAL** | **$0** |
+| Service    | Free Tier             |
+| ---------- | --------------------- |
+| Render.com | 750 hours/month       |
+| Vercel     | 100GB bandwidth/month |
+| **TOTAL**  | **$0**                |
 
 Perfect for 5-50 concurrent viewers!
 
@@ -97,6 +104,7 @@ docker run -p 1935:1935 -p 8080:8080 -p 5000:5000 -p 10000:10000 streaming-platf
 See **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** for complete instructions.
 
 **Quick version:**
+
 1. Push to GitHub
 2. Deploy backend to Render.com (Docker)
 3. Deploy frontend to Vercel
@@ -105,11 +113,13 @@ See **[DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)** for complete instructions.
 ## 🐛 Troubleshooting
 
 ### OBS can't connect
+
 - Check backend: `curl http://localhost:5000/health`
 - Verify stream key matches exactly
 - Allow port 1935 in firewall
 
 ### Video won't play
+
 - Check stream is live: `curl http://localhost:5000/api/streaming/live`
 - Try different browser (Safari has best HLS support)
 - Check browser console for errors
