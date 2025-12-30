@@ -1,0 +1,12 @@
+**/bin/
+**/obj/
+**/.git/
+**/.gitignore
+**/.vs/
+**/.vscode/
+**/node_modules/
+**/.next/
+**/frontend/
+**/tinkaring/
+README.md
+docker-compose.yml
