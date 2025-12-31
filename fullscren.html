@@ -18,7 +18,7 @@
   </style>
 </head>
 <body>
-  <video id="video" controls autoplay></video>
+  <video id="video" autoplay playsinline style="background:black;"></video>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
     var video = document.getElementById('video');
@@ -38,6 +38,23 @@
         video.requestFullscreen();
       });
     }
+    // Tap/click to pause/play
+    video.addEventListener('click', function() {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    });
+    // For touch devices
+    video.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    });
   </script>
 </body>
 </html>
