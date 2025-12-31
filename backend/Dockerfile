@@ -4,10 +4,12 @@ EXPOSE 5000
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["StreamingApi/StreamingApi.csproj", "StreamingApi/"]
-RUN dotnet restore "StreamingApi/StreamingApi.csproj"
-COPY . . 
-WORKDIR "/src/StreamingApi"
+
+# Correct project path for backend
+COPY ["StreamingApi.csproj", "./"]
+RUN dotnet restore "StreamingApi.csproj"
+COPY . .
+WORKDIR "/src"
 RUN dotnet build "StreamingApi.csproj" -c Release -o /app/build
 
 FROM build AS publish
