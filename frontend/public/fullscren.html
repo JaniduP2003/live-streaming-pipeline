@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Fullscreen HLS Player</title>
+  <style>
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+      background: black;
+      cursor: none; /* hide mouse by default */
+    }
+
+    #video {
+      width: 100vw;
+      height: 100vh;
+      background: black;
+      object-fit: contain;
+    }
+  </style>
+</head>
+<body>
+
+  <video id="video" autoplay></video>
+
+  <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+  <script>
+    const video = document.getElementById('video');
+    const videoSrc = "http://localhost:8080/live/6b054023.m3u8";
+
+    let hideControlsTimeout;
+
+    function showControls() {
+      video.controls = true;
+      document.body.style.cursor = 'default';
+
+      clearTimeout(hideControlsTimeout);
+      hideControlsTimeout = setTimeout(() => {
+        video.controls = false;
+        document.body.style.cursor = 'none';
+      }, 2000); // hide after 2 seconds
+    }
+
+    document.addEventListener('mousemove', showControls);
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play();
+        video.requestFullscreen();
+        video.controls = false;
+      });
+    } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+      video.addEventListener('loadedmetadata', () => {
+        video.play();
+        video.requestFullscreen();
+        video.controls = false;
+      });
+    }
+  </script>
+
+</body>
+</html>
