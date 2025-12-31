@@ -20,7 +20,7 @@ services:
       - StreamSettings__RtmpServer=srs
       - StreamSettings__RtmpPort=1935
     ports:
-      - "5000:5000"
+      - "5000:8080"
     depends_on:
       - srs
-    restart: unless-stoppedv
+    restart: unless-stopped
