@@ -3,6 +3,19 @@
 <head>
   <title>Fullscreen HLS Player</title>
   <style>
+    /* Hide controls bar but keep controls for stability */
+    #video::-webkit-media-controls-panel {
+      opacity: 0 !important;
+      transition: opacity 0.2s;
+    }
+    #video:hover::-webkit-media-controls-panel,
+    #video:focus::-webkit-media-controls-panel {
+      opacity: 1 !important;
+    }
+    /* Hide controls in Firefox */
+    #video::-moz-media-controls {
+      opacity: 0 !important;
+    }
     html, body {
       margin: 0;
       padding: 0;
@@ -36,6 +49,23 @@
   <video id="video" controls autoplay playsinline style="background:black;"></video>
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
+    // Tap/click to pause/play
+    video.addEventListener('click', function() {
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    });
+    // For touch devices
+    video.addEventListener('touchend', function(e) {
+      e.preventDefault();
+      if (video.paused) {
+        video.play();
+      } else {
+        video.pause();
+      }
+    });
     var video = document.getElementById('video');
     var videoSrc = "http://localhost:8080/live/55d0e555.m3u8";
     if (window.Hls && Hls.isSupported()) {
