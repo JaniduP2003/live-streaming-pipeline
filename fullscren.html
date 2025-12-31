@@ -8,58 +8,49 @@
       padding: 0;
       height: 100%;
       background: black;
+      overflow: hidden;
     }
     #video {
       width: 100vw;
       height: 100vh;
       background: black;
       object-fit: contain;
+      display: block;
+    }
+    /* Hide controls bar but keep controls for stability */
+    #video::-webkit-media-controls-panel {
+      opacity: 0 !important;
+      transition: opacity 0.2s;
+    }
+    #video:hover::-webkit-media-controls-panel,
+    #video:focus::-webkit-media-controls-panel {
+      opacity: 1 !important;
+    }
+    /* Hide controls in Firefox */
+    #video::-moz-media-controls {
+      opacity: 0 !important;
     }
   </style>
 </head>
 <body>
   <video id="video" controls autoplay playsinline style="background:black;"></video>
-    /* Hide native controls visually but keep them for stability */
-    #video::-webkit-media-controls-panel,
-    #video::-webkit-media-controls,
-    #video::-webkit-media-controls-enclosure {
-      opacity: 0;
-      pointer-events: none;
-    }
-    #video::-webkit-media-controls-play-button,
-    #video::-webkit-media-controls-volume-slider,
-    #video::-webkit-media-controls-mute-button,
-    #video::-webkit-media-controls-timeline,
-    #video::-webkit-media-controls-current-time-display,
-    #video::-webkit-media-controls-time-remaining-display,
-    #video::-webkit-media-controls-fullscreen-button {
-      display: none !important;
-    }
-    /* For Firefox */
-    #video::-moz-media-controls {
-      display: none !important;
-    }
-    /* For Edge/Chromium */
-    #video::-ms-media-controls {
-      display: none !important;
-    }
   <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
   <script>
     var video = document.getElementById('video');
     var videoSrc = "http://localhost:8080/live/55d0e555.m3u8";
-    if (Hls.isSupported()) {
+    if (window.Hls && Hls.isSupported()) {
       var hls = new Hls();
       hls.loadSource(videoSrc);
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, function() {
         video.play();
-        video.requestFullscreen();
+        if (video.requestFullscreen) video.requestFullscreen();
       });
     } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
       video.src = videoSrc;
       video.addEventListener('loadedmetadata', function() {
         video.play();
-        video.requestFullscreen();
+        if (video.requestFullscreen) video.requestFullscreen();
       });
     }
     // Tap/click to pause/play
